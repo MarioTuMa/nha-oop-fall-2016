@@ -9,141 +9,122 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   </head>
   <body>
-  <h2>Add Item</h2>
-  <h3> Item Name: </h3> <input id="name" placeholder="Item Name" width="400px"><br>
-  <h3> Price: </h3><input id="price" placeholder="Price don't use a dollar sign"><br>
-  <p> <h3>Tags:</h3>
-  Travel <input type="checkbox" class="tags" name="travel"><br>
-  Home Improvement <input type="checkbox" class="tags" name="Home Improvement"><br>
-  Food and Household <input type="checkbox" class="tags" name="Food and Household"><br>
-  Luxury <input type="checkbox" class="tags" name="Luxury"><br>
-  Electronics <input type="checkbox" class="tags" name="Electronics"><BR>
-  Gardening <input type="checkbox" class="tags" name="Gardening"><br>
-  Fashion <input type="checkbox" class="tags" name="Fashion"><br>
-  </p>
-  <p> <h3>Stores:</h3>
-  Walmart <input type="checkbox" class="stores" name="Walmart"><br>
-  Target <input type="checkbox" class="stores" name="Target"><br>
-  Whole Foods <input type="checkbox" class="stores" name="Whole Foods"><br>
-  Home Depot <input type="checkbox" class="stores" name="Home Depot"><br>
-  Amazon <input type="checkbox" class="stores" name="Amazon"><br>
-  Costco <input type="checkbox" class="stores" name="Costco"><br>
-  Walgreens <input type="checkbox" class="stores" name="Walgreens"><br>
-  </p>
-  <button id="add">Sumbit Item</button>
-  <h2>Or look at the inventories of some stores</h2>
-  Walmart <input type="checkbox" class="storestolookat" name="Walmart"><br>
-  Target <input type="checkbox" class="storestolookat" name="Target"><br>
-  Whole Foods <input type="checkbox" class="storestolookat" name="Whole Foods"><br>
-  Home Depot <input type="checkbox" class="storestolookat" name="Home Depot"><br>
-  Amazon <input type="checkbox" class="storestolookat" name="Amazon"><br>
-  Costco <input type="checkbox" class="storestolookat" name="Costco"><br>
-  Walgreens <input type="checkbox" class="storestolookat" name="Walgreens"><br>
-  <button id="look">Look at  these stores</button>
-  <p id="storeinventories"></p>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <h2>Add Item</h2>
+    <h3> Item Name: </h3>
+    <input id="name" placeholder="Item Name" width="400px"/><br>
+    <h3> Price: </h3>
+    <input id="price" placeholder="Price" type="number"/><br>
+    <p><h3>Tags:</h3>
+    Travel <input type="checkbox" class="tags" name="travel"><br>
+    Home Improvement <input type="checkbox" class="tags" name="Home Improvement"><br>
+    Food and Household <input type="checkbox" class="tags" name="Food and Household"><br>
+    Luxury <input type="checkbox" class="tags" name="Luxury"><br>
+    Electronics <input type="checkbox" class="tags" name="Electronics"><BR>
+    Gardening <input type="checkbox" class="tags" name="Gardening"><br>
+    Fashion <input type="checkbox" class="tags" name="Fashion"><br>
+    </p>
+    <p> <h3>Stores:</h3>
+      Walmart <input type="checkbox" class="stores" name="Walmart"><br>
+      Target <input type="checkbox" class="stores" name="Target"><br>
+      Whole Foods <input type="checkbox" class="stores" name="Whole Foods"><br>
+      Home Depot <input type="checkbox" class="stores" name="Home Depot"><br>
+      Amazon <input type="checkbox" class="stores" name="Amazon"><br>
+      Costco <input type="checkbox" class="stores" name="Costco"><br>
+      Walgreens <input type="checkbox" class="stores" name="Walgreens"><br>
+    </p>
+    <button id="add">Sumbit Item</button>
+    <h2>Or look at the inventories of some stores</h2>
+      Walmart <input type="checkbox" class="storesToLookAt" name="Walmart"><br>
+      Target <input type="checkbox" class="storesToLookAt" name="Target"><br>
+      Whole Foods <input type="checkbox" class="storesToLookAt" name="Whole Foods"><br>
+      Home Depot <input type="checkbox" class="storesToLookAt" name="Home Depot"><br>
+      Amazon <input type="checkbox" class="storesToLookAt" name="Amazon"><br>
+      Costco <input type="checkbox" class="storesToLookAt" name="Costco"><br>
+      Walgreens <input type="checkbox" class="storesToLookAt" name="Walgreens"><br>
+    <button id="look">Look at  these stores</button>
+    <p id="storeInventories"></p>
     <script>
-    class store{
-      constructor(name){
-        this.name=name
-        this.items=[]
+    class Store {
+      constructor(name) {
+        this.name=name;
+        this.items=[];
       }
       additem(item){
-        this.items.push(item)
+        this.items.push(item);
       }
     }
-    var listofstores=[new store("Walmart"),new store("Target"),new store("Whole Foods"),new store("Home Depot"),new store("Amazon"),new store("Costco"),new store("Walgreens")]
-    var listofitems=[]
-    class item{
-        constructor(name,price,tags,stores){
-            this.name=name;
-            this.price=price;
-            this.tags=tags
-            this.stores=stores;
-            for(let i=0;i<stores.length;i++){
-              for(let j=0;j<listofstores.length;j++){
-                if(listofstores[j].name==stores[i]){
-                  listofstores[j].items.push(name)
+    const listofstores=[new Store("Walmart"),new Store("Target"),new Store("Whole Foods"),new Store("Home Depot"),new Store("Amazon"),new Store("Costco"),new Store("Walgreens")]
+    let listofitems=[]
+    class Item {
+      constructor(name,price,tags,stores) {
+        this.name = name;
+        this.price = price;
+        this.tags = tags
+        this.stores = stores;
+
+        for(let i=0;i<stores.length;i++){
+          for(let j=0;j<listofstores.length;j++){
+            if(listofstores[j].name==stores[i]){
+              listofstores[j].items.push(name);
+            }}}}}
+            $.ajax({
+              url: "https://data.sparkfun.com/output/5J4bbngozmtlgx0mrJ0b.json",
+              success: function(result){
+                for(let i=0;i<result.length;i++){
+                  result[i].stores = result[i].stores.split(",");
+                  listofitems.push(new Item(result[i].name,result[i].price,result[i].tags,result[i].stores));
+                }
+                console.log(listofstores);
+                console.log(listofitems);
+              }
+            })
+            $("#add").click(event => {
+
+              let name = $("#name").val();
+              $("#name").value="";
+              let price = $("#price").val();
+              $("#price").value="";
+              let tags = [];
+
+              for(let i=0;i<$(".tags").length;i++){
+                if($(".tags")[i].checked===true){
+                  tags.push($(".tags")[i].name);
+                  $(".tags")[i].checked = false;
                 }
               }
-            }
-          }
-        }
-  $.ajax({
-    url: "https://data.sparkfun.com/output/5J4bbngozmtlgx0mrJ0b.json",
-    success: function(result){
-      for(let i=0;i<result.length;i++){
-        result[i].stores=result[i].stores.split(",")
-        listofitems.push(new item(result[i].name,result[i].price,result[i].tags,result[i].stores))
-      }
-      console.log(listofstores)
-      console.log(listofitems)
-    }
-  })
-  $("#add").click(event=>{
 
-    let name=$("#name").val()
-    $("#name").value=""
-    let price=$("#price").val()
-    $("#price").value=""
-    let tags=[];
-
-    for(i=0;i<$(".tags").length;i++){
-      if($(".tags")[i].checked===true){
-        tags.push($(".tags")[i].name)
-        $(".tags")[i].checked=false
-      }
-    }
-
-    let stores=[];
-    for(i=0;i<$(".stores").length;i++){
-      if($(".stores")[i].checked===true){
-        stores.push($(".stores")[i].name)
-        $(".stores")[i].checked=false
-      }
-    }
-
-    let thisitem = new item(name,price,tags,stores)
-    console.log(thisitem)
-    console.log(listofitems)
-    console.log(listofstores)
-    $.ajax({
-      url: `http://data.sparkfun.com/input/5J4bbngozmtlgx0mrJ0b?private_key=7Bokkb68dGileG0a7z0R&name=${name}&price=${price}&stores=${stores}&tags=${tags}`,
-      success: function(result){
-        console.log(`http://data.sparkfun.com/input/5J4bbngozmtlgx0mrJ0b?private_key=7Bokkb68dGileG0a7z0R&name=${name}&price=${price}&stores=${stores}&tags=${tags}`)
-      }
-    })
-  })
-  $("#look").click(event=>{
-    let stores=[];
-
-    for(let i=0;i<$(".storestolookat").length;i++){
-      if($(".storestolookat")[i].checked===true){
-        stores.push($(".storestolookat")[i].name)
-      }
-    }
-    console.log(stores)
-    console.log(stores[0])
-    $("#storeinventories").empty()
-    for(let i=0;i<stores.length;i++){
-      console.log(i)
-      $("#storeinventories").append("<h4>"+stores[i]+"</h4>")
-      for(let j=0;j<listofstores.length;j++){
-        console.log(listofstores[j].name)
-        if(listofstores[j].name==stores[i]){
-          for(k=0;k<listofstores[j].items.length;k++){
-            $("#storeinventories").append("<h6>"+listofstores[j].items[k]+"</h6>")
-          }
-        }
-      }
-    }
-  })
-
-
-
+              let stores=[];
+              for(let i=0;i<$(".stores").length;i++){
+                if($(".stores")[i].checked===true){
+                  stores.push($(".stores")[i].name);
+                  $(".stores")[i].checked = false;
+                }
+              }
+              let thisitem = new Item(name,price,tags,stores);
+              $.ajax({
+                url: `http://data.sparkfun.com/input/5J4bbngozmtlgx0mrJ0b?private_key=7Bokkb68dGileG0a7z0R&name=${name}&price=${price}&stores=${stores}&tags=${tags}`,
+                success: function(result){
+                  console.log(`http://data.sparkfun.com/input/5J4bbngozmtlgx0mrJ0b?private_key=7Bokkb68dGileG0a7z0R&name=${name}&price=${price}&stores=${stores}&tags=${tags}`);
+                }
+              })
+            });
+            $("#look").click(event => {
+              let stores=[];
+              for(let i=0;i<$(".storesToLookAt").length;i++){
+                if($(".storesToLookAt")[i].checked===true){
+                  stores.push($(".storesToLookAt")[i].name);
+                }}
+                $("#storeInventories").empty();
+                for(let i=0;i<stores.length;i++){
+                  $("#storeInventories").append(`<h4> ${stores[i]} </h4>`);
+                  for(let j=0;j<listofstores.length;j++){
+                    if(listofstores[j].name==stores[i]){
+                      for(let k=0;k<listofstores[j].items.length;k++) {
+                        $("#storeInventories").append(`<h6> ${listofstores[j].items[k]} </h6>`);
+                }}}}});
     </script>
   </body>
 </html>
