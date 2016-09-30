@@ -151,29 +151,46 @@
                 }
               }
         $("#storeInventories").empty();
-
+        console.log(stores)
         let query= new CB.CloudQuery("Stores");
-        let productquery= new CB.CloudQuery("Product")
         console.log(query)
         for(let i=0;i<stores.length;i++){
           query.equalTo("name",stores[i])
           query.find({
             success: function(lst){
               console.log(lst)
-              let currentStore=lst[0].get("name")
-              let currentStoreId=lst[0].get("id")
-              productquery.equalTo("storeId",currentStoreId)
-              productquery.find({
-                success: function(productlist){
-                  $("#storeInventories").append("<b>"+currentStore+"</b><br>")
-                  for(let j=0;j<productlist.length;j++){
-                      $("#storeInventories").append(productlist[j].get("name")+" for $"+productlist[j].get("price") +"<br>")
-                  }
-                },
-                error: function(error){
-                  console.log(error)
-                }
-              })
+
+              for(let j=0;j<lst.length;j++){
+                  let currentStore=lst[j]
+
+                  let currentStoreName=currentStore.get("name")
+                    let itemquery=new CB.CloudQuery("Product");
+
+                    itemquery.equalTo("storeId",currentStore.get("id"))
+                    console.log(currentStore.get("id"))
+                    itemquery.find({
+                      success: function(thisItemList){
+                        console.log(thisItemList)
+                        if(thisItemList.length===0){
+                          $("#storeInventories").append("<b>"+stores[i]+"</b> has no items<br><br>")
+                        }
+                        else{
+                        $("#storeInventories").append("<b>"+currentStoreName+"</b><br>")
+                        for(let l=0;l<thisItemList.length;l++){
+                          let thisItem=thisItemList[l];
+                          console.log(`<div class='item' store='${thisItem.get("storeId")}' value='${thisItem.get("name")}'> ${thisItem.get("name")} for $${thisItem.get("price")} </div>`)
+                          $("#storeInventories").append(`<div class='item' store='${thisItem.get("storeId")}' value='${thisItem.get("name")}'> ${thisItem.get("name")} for $${thisItem.get("price")} </div>`)
+                        }
+                        $("#storeInventories").append("<br>")
+                      }
+                    },
+                      error: function(errormessage){
+                        console.log(errormessage)
+
+                      }
+                    })
+
+              }
             },
             error: function(errormessage){
               console.log(errormessage)
