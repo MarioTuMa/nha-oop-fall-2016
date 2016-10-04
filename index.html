@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Quelf</title>
+
+  <link rel="stylesheet" type="text/css" href="quelf.css"></link>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="quelf.js"></script>
+  <script type="text/javascript" src="cardmessages.js"></script>
+
+</head>
+<body>
+
+	<h2>How to play:</h2>
+	<p>To play Quelf, choose a starting player. Roll the die and your player will move that many spaces. A card from the deck of the color you land on will appear. Read the card ALOUD and OBEY THE CARD. If you can't do what the card says, click the penalty button, and you will move back two spaces. If you complete the card's task, the next player should click their roll button.</p>
+<button id = "penalty">PENALTY</button> <button id = "roll">PLAYER 1 ROLL</button>
+
+<p id="player1space"></p>
+<p id="player2space"></p>
+
+<br><br><center>
+<table id = "gameBoard" height = "200px" border = "1">
+	<tr height = "90px">
+	<td class="green">Start</td>
+	<td class="purple">1</td>
+	<td class="green">2</td>
+	<td class="blue">3</td>
+	<td class="yellow">4</td>
+	<td class="red">5</td>
+	<td class="purple">6</td>
+	<td class="green">7</td>
+	<td class="blue">8</td>
+	<td class="yellow">9</td>
+	<td class="red">10</td>
+	</tr>
+
+	<tr height = "90px" width = "90px">
+	<td class="red">Finish</td>
+	<td class="red">20</td>
+	<td class="yellow">19</td>
+	<td class="blue">18</td>
+	<td class="green">17</td>
+	<td class="purple">16</td>
+	<td class="red">15</td>
+	<td class="yellow">14</td>
+	<td class="blue">13</td>
+	<td class="green">12</td>
+	<td class="purple">11</td>
+	</tr>
+</table>
+</center>
+<br>
+<br>
+<center>
+<table id="ongoingcards" border = 1>
+<tr>
+  <td width = "475px" height = "50px">Player 1</td>
+  <td width = "475px" height = "50px">Global</td>
+  <td width = "475px" height = "50px">Player 2</td>
+</tr>
+<tr>
+  <td width = "475px" height = "250px" id="p1"></td>
+  <td width = "475px" height = "250px" id="globale"></td>
+  <td width = "475px" height = "250px" id="p2"></td>
+</tr>
+</table>
+<br>
+<table id = "cardExplain" border = 1>
+	<tr>
+	<td width = "200px" height = "350px">
+		<center>ROOLZ (Blue)</center><br>
+		GLOBAL ROOLZ affect ALL players. If you draw one, it will stay under the game board and ALL players must obey the rule at ALL TIMES or else pay the penalty. There can only be one Global Roolz card in play at any given time, so each time you draw a Global Roolz card, discard the previous one.
+	</td>
+	<td width = "200px" height = "350px">
+		<center>ROOLZ (Blue)</center><br>
+		TALKING ROOLZ affect only the player who drew the card. Each player can only have one Talking Roolz card in play at any time. If you get caught not following the card, pay the penalty, but keep the card in play.
+	</td>
+	<td width = "200px" height = "350px">
+		<center>ROOLZ (Blue)</center><br>
+		ACTION ROOLZ affect only the player who drew the card. Each player can only have one Action Roolz card in play at any time. If you get caught not following the card, pay the penalty, but keep the card in play.
+	</td>
+	<td width = "200px" height = "350px">
+		<center>QUIZZLE (Green)</center><br>
+		QUIZZLE is a trivia category with questions ranging from the obvious to the impossible. The opponent on your right draws the card and reads the question to you. If you guess the answer correctly, you avoid the penalty.
+	</td>
+	<td width = "200px" height = "350px">
+		<center>SHOWBIZ (Purple)</center><br>
+		SHOWBIZ cards are acting/stunts cards. If your card tells you to ask others to guess, flip the timer and let them guess until the timer expires. If you cannot perform the stunt, click the penalty button and let the next player have their turn.
+	</td>
+	<td width = "200px" height = "350px">
+		<center>STUNTZ (Yellow)</center><br>
+		STUNTZ cards are acting/stunts cards. If your card tells you to ask others to guess, flip the timer and let them guess until the timer expires. If you cannot perform the stunt, click the penalty button and let the next player have their turn.
+	</td>
+	<td width = "200px" height = "350px">
+		<center>SCATTERBRAINZ (Red)</center><br>
+		SCATTERBRAINZ cards are trivia cards where everyone plays. If you are given the choice of choosing a topic, choose one and every player must name a valid answer, starting with you, and then proceeding left in your circle of players.
+	</td>
+	</tr>
+</table>
+</center>
+<p>© InspectorElement 2016</p>
+</body>
+</html>
