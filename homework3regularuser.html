@@ -83,9 +83,12 @@
         }
       })
       $(document).on("click", ".item", function(){
-        console.log("hello")
-        CB.CloudApp.init('almxwdbwxvmx', 'c0044bb7-6c34-41af-a953-eca3928648c9');
-        console.log((".item").val())
+        let thisitem=value.toElement.outerHTML
+        console.log(thisitem)
+        let store=(thisitem.split("=")[2]).split("\"")[1]
+        let itemname=(thisitem.split("=")[3]).split("\"")[1]
+        console.log(itemname)
+        window.location.href="file:///Users/pazmacias/Documents/nano-extra-master/nha-apis-spring-2016/week-3/homework3item.html?item="+itemname+"&storeId="+store
       })
 
 
