@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cloudboost.io/js-sdk/cloudboost.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  </head>
+  <body>
+    <p id="welcome" style="font-size:24px" ></p>
+    <h5>
+      <h3>Add Item</h3>
+      Name:  <input id="name"/>
+      Price: <input id="price" type="number"/>
+      <p> Stores:
+        <br>
+        <br>
+       Walmart <input type="checkbox" class="stores" name="Walmart"><br>
+       Target <input type="checkbox" class="stores" name="Target"><br>
+       Whole Foods <input type="checkbox" class="stores" name="Whole Foods"><br>
+       Home Depot <input type="checkbox" class="stores" name="Home Depot"><br>
+       Amazon <input type="checkbox" class="stores" name="Amazon"><br>
+       Costco <input type="checkbox" class="stores" name="Costco"><br>
+       Walgreens <input type="checkbox" class="stores" name="Walgreens"><br>
+       Fairway <input type="checkbox" class="stores" name="Fairway"><br>
+
+      <button id="submit">Submit</button><br>
+    </p>
+      <h3>
+      Or look at the inventories of some stores:</h3>
+      Walmart <input type="checkbox" class="storesToLookAt" name="Walmart"><br>
+      Target <input type="checkbox" class="storesToLookAt" name="Target"><br>
+      Whole Foods <input type="checkbox" class="storesToLookAt" name="Whole Foods"><br>
+      Home Depot <input type="checkbox" class="storesToLookAt" name="Home Depot"><br>
+      Amazon <input type="checkbox" class="storesToLookAt" name="Amazon"><br>
+      Costco <input type="checkbox" class="storesToLookAt" name="Costco"><br>
+      Walgreens <input type="checkbox" class="storesToLookAt" name="Walgreens"><br>
+      Fairway <input type="checkbox" class="storesToLookAt" name="Fairway"><br>
+    <button id="look">Look at  these stores</button>
+    <p id="storeInventories"></p>
+    <h3>
+      Or look at and manage your users:
+    </h3>
+    Search by name or ID
+    <br>
+    <br>
+    <input id="userlookup"/>
+    <select id="identificationMethod">
+<option value="username">Name</option>
+<option value="id">ID</option>
+    </select><br>
+    <button id="lookup">Look Up User</button>
+    <p id="userspace"></p>
+    </h5>
+    <script>
+      let myUserinfo=location.search
+      if(myUserinfo.split("=").length == 2){
+
+        myUserinfo=myUserinfo.split("=")
+        console.log(`${myUserinfo[0]}`)
+        myUser={
+          "login":myUserinfo[1]
+        }
+      $("#welcome").append("Welcome "+myUser.login)
+      }
+      $("#submit").click(()=>{
+
+        CB.CloudApp.init('almxwdbwxvmx', 'c0044bb7-6c34-41af-a953-eca3928648c9');
+        const listofstores=["Walmart","Target","Whole Foods", "Home Depot", "Amazon", "Costco", "Walgreens", "Fairway"];
+        store = new CB.CloudObject("Stores");
+        /*let productquery=new CB.CloudQuery("Product")
+        productquery.find({
+        success: function(lst){
+          console.log(lst)
+        store.set("name", "Fairway");
+        let products=[]
+        for(i=0;i<lst.length;i++){
+          products.push(lst[i])
+        }
+        store.set("Items", products);
+        store.save({
+          success: (obj) => {
+            console.log(obj)
+
+          },
+          error: (err) => {
+            console.log(err)
+          }
+        })
+      }
+        });
+
+        let store;
+        console.log(listofstores.length)
+        for(myStore in listofstores){
+          store = new CB.CloudObject("Stores");
+          store.set("name",myStore);
+          store.set("Items",[]);
+          store.save({
+            success: (obj) => {
+              console.log(obj)
+            },
+            error: (err) => {
+              console.log(err)
+            }
+          });
+        }*/
+
+
+        let query=new CB.CloudQuery("Stores")
+        let stores=[];
+                for(let i=0;i<$(".stores").length;i++){
+                  if($(".stores")[i].checked===true){
+                    stores.push($(".stores")[i].name);
+                    $(".stores")[i].checked = false;
+                  }
+                }
+        for(let t=0;t<stores.length;t++){
+          console.log(t)
+          let product=new CB.CloudObject("Product");
+          query.equalTo("name",stores[t])
+          query.find({
+          success: function(lst){
+            console.log(lst)
+              let currentstore=lst[0]
+              product.set("name",$("#name").val());
+              product.set("price",parseInt($("#price").val()));
+              product.set("storeId",currentstore.get("id"))
+              console.log("bout to save")
+              product.save({
+                success: (obj) => {
+                },
+                error: (err) => {
+                  console.log("fail");
+                  console.log(err);
+                }
+              });
+
+        },
+          error: function(object){
+            console.log("fail")
+          }
+        })
+      }
+      });
+
+      $("#look").click(()=>{
+        CB.CloudApp.init('almxwdbwxvmx', 'c0044bb7-6c34-41af-a953-eca3928648c9');
+        let stores=[];
+              for(let i=0;i<$(".storesToLookAt").length;i++){
+                if($(".storesToLookAt")[i].checked===true){
+                  stores.push($(".storesToLookAt")[i].name);
+                }
+              }
+        $("#storeInventories").empty();
+        console.log(stores)
+        let query= new CB.CloudQuery("Stores");
+        console.log(query)
+        for(let i=0;i<stores.length;i++){
+          query.equalTo("name",stores[i])
+          query.find({
+            success: function(lst){
+              console.log(lst)
+
+              for(let j=0;j<lst.length;j++){
+                  let currentStore=lst[j]
+
+                  let currentStoreName=currentStore.get("name")
+                    let itemquery=new CB.CloudQuery("Product");
+
+                    itemquery.equalTo("storeId",currentStore.get("id"))
+                    console.log(currentStore.get("id"))
+                    itemquery.find({
+                      success: function(thisItemList){
+                        console.log(thisItemList)
+                        if(thisItemList.length===0){
+                          $("#storeInventories").append("<b>"+stores[i]+"</b> has no items<br><br>")
+                        }
+                        else{
+                        $("#storeInventories").append("<b>"+currentStoreName+"</b><br>")
+                        for(let l=0;l<thisItemList.length;l++){
+                          let thisItem=thisItemList[l];
+                          console.log(`<div class='item' store='${thisItem.get("storeId")}' value='${thisItem.get("name")}'> ${thisItem.get("name")} for $${thisItem.get("price")} </div>`)
+                          $("#storeInventories").append(`<div class='item' store='${thisItem.get("storeId")}' value='${thisItem.get("name")}'> ${thisItem.get("name")} for $${thisItem.get("price")} </div>`)
+                        }
+                        $("#storeInventories").append("<br>")
+                      }
+                    },
+                      error: function(errormessage){
+                        console.log(errormessage)
+
+                      }
+                    })
+
+              }
+            },
+            error: function(errormessage){
+              console.log(errormessage)
+            }
+        })
+        }
+      })
+
+
+      $("#lookup").click(()=>{
+        $('#userspace').empty();
+        CB.CloudApp.init('almxwdbwxvmx', 'c0044bb7-6c34-41af-a953-eca3928648c9');
+        let userIdentification=$("#userlookup").val();
+        let identificationMethod=$("#identificationMethod").val()
+        let query= new CB.CloudQuery("Users");
+        query.equalTo(identificationMethod,userIdentification)
+        query.find({
+          success: function(user){
+            if(user[0]!=undefined){
+              user=user[0]
+              console.log(user)
+              let username=user.get("username")
+              console.log(username)
+              let userid=user.get("id")
+              let isAdmin=user.get("isAdmin")
+              $('#userspace').append("Username: "+username+"<br>ID: "+userid+"<br>Is admin? "+isAdmin+"<button id='toggleAdmin' value='" +username+"'>Toggle Adminity</button>");
+              console.log($("#toggleAdmin").val());
+            }
+            else{
+              $('#userspace').append("There is no user by the " + identificationMethod+ " of "+ userIdentification)
+            }
+          },
+          error: function(error){
+            console.log(error)
+          }
+        })
+      })
+
+      $(document).on("click", "#toggleAdmin", function(){
+        console.log("hello")
+        CB.CloudApp.init('almxwdbwxvmx', 'c0044bb7-6c34-41af-a953-eca3928648c9');
+
+        let userIdentification=$("#toggleAdmin").val();
+        let query= new CB.CloudQuery("Users");
+        query.equalTo("username",userIdentification)
+        query.find({
+          success: function(user){
+              user=user[0]
+              let username=user.get("username")
+              let userid=user.get("id")
+              let isAdmin=user.get("isAdmin")
+              let userpassword=user.get("password")
+              console.log(userpassword)
+              isAdmin=!isAdmin
+              user.set("isAdmin",isAdmin)
+              $('#userspace').empty();
+              $('#userspace').append("Username: "+username+"<br>ID: "+userid+"<br>Is admin? "+isAdmin+"    <button id='toggleAdmin' value='" +username+"'>Toggle Adminity</button>");
+              user.save({
+                success: function(obj){},
+                error: function(error){
+                  console.log(error)
+                }
+              })
+          },
+          error: function(error){
+            console.log(error)
+          }
+        })
+      });
+
+
+    </script>
+  </body>
+</html>

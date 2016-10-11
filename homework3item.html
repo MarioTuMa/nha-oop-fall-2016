@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cloudboost.io/js-sdk/cloudboost.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  </head>
+  <body>
+    <h3 id="welcome"></h3>
+    <h5>
+
+
+    <button id="look">GO back</button>
+    <p id="itemComments">Add you own comment: <input id="addMyComment"><button id="commentadder">Sumbit comment</button></p>
+    </h5>
+    <script>
+    let myUserinfo=location.search
+    let thisItem
+    let comments
+    console.log(myUserinfo.split("=").length)
+    if(myUserinfo.split("=").length == 3){
+      myUserinfo=myUserinfo.split("=")
+      let store=myUserinfo[2]
+      let name=myUserinfo[1].split("&")[0]
+      console.log(store,name)
+    $("#welcome").append("Welcome user, you are looking at the comments for "+name)
+      CB.CloudApp.init('almxwdbwxvmx', 'c0044bb7-6c34-41af-a953-eca3928648c9');
+      let query=new CB.CloudQuery("Product")
+      query.equalTo("name",name)
+      query.equalTo("storeId",store)
+      query.find({
+        success: function(thisItemList){
+          console.log(thisItemList)
+          thisItem=thisItemList[0];
+          comments=thisItem.get("comment")
+          console.log(comments)
+          for(i=0;i<comments.length;i++){
+            $("#itemComments").prepend(comments[i]+"<br>")
+          }
+        },
+        error: function(error){
+          console.log(error)
+        }
+    })
+  }
+    else{
+      $("#welcome").append("Click go Back");
+    }
+
+    $("#commentadder").click(()=>{
+      console.log(comments)
+      let newcomment=$("#addMyComment").val()
+      comments.push(newcomment)
+      console.log(comments)
+      thisItem.set("comment",comments)
+      thisItem.save({
+        success: function(message){
+          location.reload()
+        },
+        error: function(error){
+          console.log(error)
+        }
+      })
+
+    }
+  )
+  $("#look").click(()=>{
+    window.location.href="https://rawgit.com/Marioisdabest/nha-oop-fall-2016/homework-3/homework3regularuser.html"
+  }
+)
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cloudboost.io/js-sdk/cloudboost.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  </head>
+  <style>
+    body {
+      padding-left: 30px;
+      padding-right: 20px;
+      padding-top: 10px;
+      padding-bottom: 20px;
+    }
+    .input {
+      height: 25px;
+      width: 200px;
+    }
+    button {
+      height: 25px;
+      width: 150px;
+    }
+  </style>
+  <body>
+    <h4>
+      <input id="user" placeholder="Username" width="70" class="input">
+      <input id="password" placeholder="Password" class="input" type="password">
+      <br>
+      <button id="login">Login</button>
+      <button id="newUser">Create User</button>
+    </h4>
+    <script>
+      $("#login").click(event => {
+        CB.CloudApp.init('almxwdbwxvmx', 'c0044bb7-6c34-41af-a953-eca3928648c9');
+        let user=$("#user").val();
+        let password=$("#password").val();
+
+        let query= new CB.CloudQuery("Users");
+
+        query.equalTo("username", user);
+
+        query.find({
+          success: function(thisuser){
+            if(typeof(thisuser[0]) != "undefined"){
+              thisuser=thisuser[0]
+              console.log(thisuser)
+              let isAdmin=thisuser.get("isAdmin")
+              if(isAdmin){
+                console.log(isAdmin)
+                window.location.href="https://rawgit.com/Marioisdabest/nha-oop-fall-2016/homework-3/homework3admin.html?login="+user
+              }
+              else{
+                console.log("I am not an admin")
+                window.location.href="https://rawgit.com/Marioisdabest/nha-oop-fall-2016/homework-3/homework3regularuser.html"
+              }
+            }
+            else{
+              console.log(user +" is not a username in the database")
+            }
+          },
+          error: function(errormessage){
+            console.log(errormessage)
+          }
+        })
+      })
+      $("#newUser").click(event => {
+        CB.CloudApp.init('almxwdbwxvmx', 'c0044bb7-6c34-41af-a953-eca3928648c9');
+        let user=$("#user").val();
+        let password=$("#password").val();
+        console.log(user, password)
+        let thisUser= new CB.CloudObject("Users");
+        thisUser.set("username",user)
+        thisUser.set("password",password)
+        thisUser.set("isAdmin",false)
+        thisUser.save({
+          success: function(savemessage){
+            console.log(savemessage)
+          },
+          error: function(errormessage){
+            console.log(errormessage)
+          }
+        })
+      })
+    </script>
+  </body>
+</html>
