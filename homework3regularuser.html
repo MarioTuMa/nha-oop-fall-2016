@@ -82,7 +82,7 @@
         })
         }
       })
-      $(document).on("click", ".item", function(){
+      $(document).on("click", ".item", function(value){
         let thisitem=value.toElement.outerHTML
         console.log(thisitem)
         let store=(thisitem.split("=")[2]).split("\"")[1]
