@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cloudboost.io/js-sdk/cloudboost.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  </head>
+  <body>
+    <h5>
+      Name:  <input id="name"/>
+      Price: <input id="price" type="number"/>
+      <p> Stores:
+        <br>
+        <br>
+       Walmart <input type="checkbox" class="stores" name="Walmart"><br>
+       Target <input type="checkbox" class="stores" name="Target"><br>
+       Whole Foods <input type="checkbox" class="stores" name="Whole Foods"><br>
+       Home Depot <input type="checkbox" class="stores" name="Home Depot"><br>
+       Amazon <input type="checkbox" class="stores" name="Amazon"><br>
+       Costco <input type="checkbox" class="stores" name="Costco"><br>
+       Walgreens <input type="checkbox" class="stores" name="Walgreens"><br>
+       Fairway <input type="checkbox" class="stores" name="Fairway"><br>
+     </p>
+      <button id="submit">Submit</button><br>
+      Or look at the inventories of some stores: <br>
+      <br>
+      Walmart <input type="checkbox" class="storesToLookAt" name="Walmart"><br>
+      Target <input type="checkbox" class="storesToLookAt" name="Target"><br>
+      Whole Foods <input type="checkbox" class="storesToLookAt" name="Whole Foods"><br>
+      Home Depot <input type="checkbox" class="storesToLookAt" name="Home Depot"><br>
+      Amazon <input type="checkbox" class="storesToLookAt" name="Amazon"><br>
+      Costco <input type="checkbox" class="storesToLookAt" name="Costco"><br>
+      Walgreens <input type="checkbox" class="storesToLookAt" name="Walgreens"><br>
+      Fairway <input type="checkbox" class="storesToLookAt" name="Fairway"><br>
+    <button id="look">Look at  these stores</button>
+    <p id="storeInventories"></p>
+    </h5>
+    <script>
+
+      $("#submit").click(()=>{
+        CB.CloudApp.init('almxwdbwxvmx', 'c0044bb7-6c34-41af-a953-eca3928648c9');
+        const listofstores=["Walmart","Target","Whole Foods", "Home Depot", "Amazon", "Costco", "Walgreens", "Fairway"];
+        store = new CB.CloudObject("Stores");
+        /*let productquery=new CB.CloudQuery("Product")
+        productquery.find({
+        success: function(lst){
+          console.log(lst)
+        store.set("name", "Fairway");
+        let products=[]
+        for(i=0;i<lst.length;i++){
+          products.push(lst[i])
+        }
+        store.set("Items", products);
+        store.save({
+          success: (obj) => {
+            console.log(obj)
+
+          },
+          error: (err) => {
+            console.log(err)
+          }
+        })
+      }
+        });
+
+        let store;
+        console.log(listofstores.length)
+        for(myStore in listofstores){
+          store = new CB.CloudObject("Stores");
+          store.set("name",myStore);
+          store.set("Items",[]);
+          store.save({
+            success: (obj) => {
+              console.log(obj)
+            },
+            error: (err) => {
+              console.log(err)
+            }
+          });
+        }*/
+
+        let product=new CB.CloudObject("Product");
+        console.log(product);
+        product.set("name",$("#name").val());
+        product.set("price",parseInt($("#price").val()));
+
+        product.save({
+          success: (obj) => {
+            console.log("success save");
+            console.log(obj);
+            let query= new CB.CloudQuery("Stores");
+
+            console.log(query)
+            let stores=[];
+                    for(let i=0;i<$(".stores").length;i++){
+                      if($(".stores")[i].checked===true){
+                        stores.push($(".stores")[i].name);
+                        $(".stores")[i].checked = false;
+                      }
+                    }
+            console.log(stores)
+            console.log(query)
+            for(i=0;i<stores.length;i++){
+              query.equalTo("name",stores[i])
+            query.find({
+            success: function(lst){
+              console.log(lst)
+              for(i=0;i<lst.length;i++){
+                let currentstore=lst[i]
+
+                currentstore.fetch({
+                  success: function(data) {
+                    console.log(data);
+                    let myItems=data.get("Items");
+                    myItems.push(obj)
+                    data.set("Items",myItems)
+                    data.save({
+                      success: function(obj) {
+                        console.log("yay")
+                      },
+                      error: function(err) {
+
+                      }
+                    });
+                  },
+                  error: function(err) {
+
+                  }
+                });
+              }
+          },
+            error: function(object){
+              console.log("fail")
+            }
+
+          })
+        }
+          },
+          error: (err) => {
+            console.log("fail");
+            console.log(err);
+
+          }
+        });
+      });
+
+      $("#look").click(()=>{
+        CB.CloudApp.init('almxwdbwxvmx', 'c0044bb7-6c34-41af-a953-eca3928648c9');
+        let stores=[];
+              for(let i=0;i<$(".storesToLookAt").length;i++){
+                if($(".storesToLookAt")[i].checked===true){
+                  stores.push($(".storesToLookAt")[i].name);
+                }
+              }
+        $("#storeInventories").empty();
+
+        let query= new CB.CloudQuery("Stores");
+        console.log(query)
+        for(let i=0;i<stores.length;i++){
+          query.equalTo("name",stores[i])
+          query.find({
+            success: function(lst){
+              console.log(lst)
+              for(let j=0;j<lst.length;j++){
+                  let currentStore=lst[j]
+                  let currentStoreName=currentStore.get("name")
+                  let currentItems=currentStore.get("Items")
+                  console.log(currentStore,currentStoreName,currentItems)
+
+                  for(let k=0;k<currentItems.length;k++){
+                    let itemquery=new CB.CloudQuery("Product");
+                    console.log(currentItems[k].get("id"))
+                    itemquery.equalTo("id",currentItems[k].get("id"))
+                    itemquery.find({
+                      success: function(thisItemList){
+                        console.log(thisItemList)
+                        $("#storeInventories").append("<b>"+currentStoreName+"<b><br>")
+                        for(l=0;l<thisItemList.length;l++){
+                          let thisItem=thisItemList[l];
+                          $("#storeInventories").append(thisItem.get("name")+": $"+thisItem.get("price")+"<br>")
+                        }
+                      },
+                      error: function(errormessage){
+                        console.log(errormessage)
+
+                      }
+                    })
+                  }
+              }
+            },
+            error: function(errormessage){
+              console.log(errormessage)
+            }
+        })
+        }
+      })
+
+
+
+    </script>
+  </body>
+</html>
