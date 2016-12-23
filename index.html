@@ -46,8 +46,8 @@
     
     <script>
       //$("#loggedin").hide()
+      CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
       $("#login").click(event => {
-        CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
         let username=$("#user").val();
         let password=$("#password").val();
         let email=$("#email").val();
@@ -66,7 +66,6 @@
         })
       })
       $("#newUser").click(event => {
-        CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
         let user=$("#user").val();
         let password=$("#password").val();
         let email=$("#email").val();
