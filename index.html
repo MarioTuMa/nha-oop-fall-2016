@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cloudboost.io/js-sdk/cloudboost.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  </head>
+  <style>
+    body {
+      padding-left: 30px;
+      padding-right: 20px;
+      padding-top: 10px;
+      padding-bottom: 20px;
+    }
+    .input {
+      height: 25px;
+      width: 200px;
+    }
+    button {
+      height: 25px;
+      width: 150px;
+    }
+  </style>
+  <body>
+    <h4>
+      <input id="user" placeholder="Username" width="70" class="input">
+      <input id="password" placeholder="Password" class="input" type="password">
+      <input id="email" placeholder="email@example.com" class="input">
+      <br>
+      <button id="login">Login</button>
+      <button id="newUser">Create User</button>
+    </h4>
+    <script>
+      
+      $("#login").click(event => {
+        CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
+        let username=$("#user").val();
+        let password=$("#password").val();
+        let email=$("#email").val();
+        let user = new CB.CloudUser();
+        user.set('username', username);
+        user.set('password', password);
+        user.set('email', email);
+        user.logIn({
+          success: function(data){
+            console.log(data)
+
+          },
+          error: function(err){
+            console.log(err)
+          }
+        })
+      })
+      $("#newUser").click(event => {
+        CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
+        let user=$("#user").val();
+        let password=$("#password").val();
+        let email=$("#email").val();
+        console.log(user, password)
+        let home= new CB.CloudGeoPoint(40,-74);
+        let latestuser= new CB.CloudUser;
+        latestuser.set("username",user)
+        latestuser.set("password",password)
+        latestuser.set("email",email)
+        latestuser.set("home",home)
+
+        latestuser.signUp({
+          success: function(savemessage){
+            console.log(savemessage)
+          },
+          error: function(errormessage){
+            console.log(errormessage)
+          }
+        })
+      })
+    </script>
+  </body>
+</html>
