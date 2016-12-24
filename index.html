@@ -3,8 +3,7 @@
   <head>
     <script src="https://cloudboost.io/js-sdk/cloudboost.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
+
   </head>
   <style>
     body {
@@ -21,14 +20,8 @@
       height: 25px;
       width: 150px;
     }
-    #map {
-        height: 750px;
-        width: 1000px;
-
-      }
   </style>
   <body>
-    <span id="login">
     <h4>
       <input id="user" placeholder="Username" width="70" class="input">
       <input id="password" placeholder="Password" class="input" type="password">
@@ -37,17 +30,10 @@
       <button id="login">Login</button>
       <button id="newUser">Create User</button>
     </h4>
-    </span>
-    <!--<span id="loggedin">
-      <br>
-      <br>
-      <div id="map"></div>
-    </span>-->
-    
     <script>
-      //$("#loggedin").hide()
-      CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
+
       $("#login").click(event => {
+        CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
         let username=$("#user").val();
         let password=$("#password").val();
         let email=$("#email").val();
@@ -66,6 +52,7 @@
         })
       })
       $("#newUser").click(event => {
+        CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
         let user=$("#user").val();
         let password=$("#password").val();
         let email=$("#email").val();
@@ -86,14 +73,6 @@
           }
         })
       })
-      /*mapboxgl.accessToken = 'pk.eyJ1IjoibWFyaW8yMzU3IiwiYSI6ImNpdjRnbDl1bzAwaW0yenRqbmxrYTBic2UifQ.tU2ENlJUDkdYp8kOJBtPzw';
-        var map = new mapboxgl.Map({
-          container: 'map',
-          center: [40.7686,-73.9867],
-          zoom: 10.78,
-          style: "mapbox://styles/mapbox/streets-v9",
-          hash: true
-        });*/
     </script>
   </body>
 </html>
