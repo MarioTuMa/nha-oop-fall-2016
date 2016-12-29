@@ -3,8 +3,10 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.29.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.29.0/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://cloudboost.io/js-sdk/cloudboost.js"></script>
     <title>Simple Polylines</title>
     <style>
       html, body {
@@ -18,12 +20,14 @@
 
       }
       .mapboxgl-marker {
-        background-image: 'url("https://www.cliparts101.com/files/41/B9390548641D5BD1660AFD0E80367813/Map_Marker.png")'
+        background-image: 'url("http://www.cliparts101.com/files/41/B9390548641D5BD1660AFD0E80367813/Map_Marker.png")'
       }
     </style>
     <script src=  "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
 <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.css' type='text/css' />
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.0.3/mapbox-gl-directions.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.0.3/mapbox-gl-directions.css' type='text/css' />
 
   </head>
   <body>
@@ -32,58 +36,193 @@
     <br>
     <div id="myPlaces">
     <h3><b>Your Places</b></h3>
-    Home (8 River Terrace) <input class='yourPlaces' id="40.7159029,-74.0164775" type="checkbox"/>
-    Groceries (270 Greenwich Street) <input id="40.7155236,-74.0114554" class='yourPlaces' type="checkbox"/>
+    Home (8 River Terrace) <input class='yourPlaces' id="-74.0164775,40.7159029" type="checkbox"/>
+    Groceries (270 Greenwich Street) <input id="-74.0114554,40.7155236" class='yourPlaces' type="checkbox"/>
+
   </div>
+  Make a route
+  <select id="transportation">
+    <option value="driving">Driving</option>
+    <option value="walking">Walking</option>
+    <option value="cycling">Cycling</option>
+  </select>
+through your selected places:
+  <button id="route">Route</button>
     <br>
     Add new location to your favorites: <input id="placeName" placeholder="Place Name"><input placeholder="Address or Zipcode" id="address">
     <button id="addPlace">Add to faves</button>
 
 <script>
+
+
+let placeholderid1="placeholderid1";
+let placeholderid2="placeholderid2";
+let counter=0;
+//CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFyaW8yMzU3IiwiYSI6ImNpdjRnbDl1bzAwaW0yenRqbmxrYTBic2UifQ.tU2ENlJUDkdYp8kOJBtPzw';
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
     center: [-74, 40.75],
-    zoom: 13
+    zoom: 11
 });
 
 map.addControl(new MapboxGeocoder({
     accessToken: mapboxgl.accessToken
 
 }));
-      /*var marker = new mapboxgl.Marker({
-        options: new mapboxgl.LngLat(-73.9867,40.75)
-      })*/
-      console.log(map)
-      var marker = new mapboxgl.Marker()
-        marker.setLngLat([-74, 40.75])
-        marker.addTo(map);
 
 
 
 
-$(".mapboxgl-marker").append("<img height='6' width='6' src='https://www.clipartkid.com/images/282/red-glossy-dot-clip-art-at-clker-com-vector-clip-art-online-royalty-Gefbyd-clipart.png'/>")
+
+
+$(".mapboxgl-marker").append("<img height='12' width='12' src='https://www.clipartkid.com/images/282/red-glossy-dot-clip-art-at-clker-com-vector-clip-art-online-royalty-Gefbyd-clipart.png'/>")
+$(".yourPlaces").click(function(event){
+  console.log(event)
+  let id=event.currentTarget.id
+  let title=event.target.parentNode;
+  console.log(title)
+  let coordinates=id.split(",");
+  console.log(coordinates)
+  if(event.currentTarget.checked){
+    map.addSource(id, {
+     type: 'geojson',
+     data: {
+         "type": "FeatureCollection",
+         "features": [{
+             "type": "Feature",
+             "properties": {},
+             "geometry": {
+                 "type": "Point",
+                 "coordinates": coordinates
+             },
+             "properties": {
+                    "title": title,
+                    "icon": "circle"
+                }
+         }]
+     }
+  });
+  map.addLayer({
+        "id": id,
+        "type": "symbol",
+        "source": id,
+        "layout": {
+            "icon-image": "{icon}-15",
+            "text-field": "{title}",
+            "text-offset": [0, 0.2],
+            "text-anchor": "top"
+        }
+    });
+}
+else{
+
+}
+})
 $("#addPlace").click(function(){
   let address=$("#address").val()
   let place=$("#placeName").val()
   console.log(place)
 
-  let url="https://maps.googleapis.com/maps/api/geocmypmode/json?address="+address+"&key=AIzaSyCgvMvFwad7QwQI3wlFjN-lld69R5mfwxw"
+  let url="https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyCgvMvFwad7QwQI3wlFjN-lld69R5mfwxw"
   console.log(url)
-  console.l
   $.ajax({
     url: url,
     success: function(data){
       console.log(data)
       console.log(data.results[0].geometry)
-      $("#myPlaces").append(place+"<input class='yourPlaces' id='"+data.results[0].geometry.location.lat+","+data.results[0].geometry.location.lng+"' type='checkbox'>")
+      $("#myPlaces").append(place+" ("+data.results[0].formatted_address+")"+"<input class='yourPlaces' id='"+data.results[0].geometry.location.lng+","+data.results[0].geometry.location.lat+"' type='checkbox'> ")
     },
     error: function(err){
       alert("Either that place doesn't exist or google is down. Take your pick. #Savage")
     }
   })
 })
+map.on('zoom', function() {
+  let zoom=map.getZoom();
+    $(".mapboxgl-marker").empty();
+    $(".mapboxgl-marker").append("<img height='"+zoom/1.5+"' width='"+zoom/1.5+"' src='https://www.clipartkid.com/images/282/red-glossy-dot-clip-art-at-clker-com-vector-clip-art-online-royalty-Gefbyd-clipart.png'/>")
+
+});
+$("#route").click(function(){
+  console.log($(".yourPlaces"))
+  let myPlaces=$(".yourPlaces")
+  console.log(myPlaces)
+  let places=[]
+  for(let i=0;i<myPlaces.length;i++){
+    if(myPlaces[i].checked==true){
+    var route=places.push(myPlaces[i].id)
+  }
+  }
+  let routeurl="https://api.mapbox.com/directions/v5/mapbox/"+$("#transportation").val()+"/"
+  console.log(places)
+  for(let i=0;i<places.length;i++){
+    routeurl=routeurl+places[i]
+    if(i<places.length-1){
+      routeurl=routeurl+";"
+    }
+  }
+  routeurl=routeurl+".json?access_token=pk.eyJ1IjoibWFyaW8yMzU3IiwiYSI6ImNpdjRnbDl1bzAwaW0yenRqbmxrYTBic2UifQ.tU2ENlJUDkdYp8kOJBtPzw&geometries=geojson";
+  console.log(routeurl)
+  counter++;
+  $.ajax({
+    url: routeurl,
+    success: function(data){
+      console.log(data)
+      var route=(data.routes[0].geometry.coordinates)
+      console.log(route)
+      console.log(counter)
+      if(counter==1){
+      map.addSource("route", {
+        "type": "geojson",
+        "data": {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+                "type": "LineString",
+                "coordinates": route
+            }
+        }
+    });
+
+    map.addLayer({
+        "id": "route",
+        "type": "line",
+        "source": "route",
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": "cyan",
+            "line-width": 8
+        }
+    });
+  }
+  else{
+    map.getSource('route').setData({
+  "type": "FeatureCollection",
+  "features": [{
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+          "type": "LineString",
+          "coordinates": route
+      }
+  }]
+});
+  }
+
+      },
+    error: function(err){
+      console.log(err)
+    }
+  })
+
+})
+
+
     </script>
 
   </body>
