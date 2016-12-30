@@ -76,7 +76,7 @@ query.find({
               let address=CBOBJ.get("Address")
               let lat=CBOBJ.get("Location").get("latitude")
               let lng=CBOBJ.get("Location").get("longitude")
-              $("#myPlaces").append(name+" ("+address+")"+"<input class='yourPlaces' id='"+lng+","+lat+"' type='checkbox'> ")
+              $("#myPlaces").append(name+" ("+address+")"+"<input class='yourPlaces' id='"+lng+","+lat+"' type='checkbox'><br> ")
             }
           },
           error: function(fail_msg){
@@ -173,7 +173,7 @@ $("#addPlace").click(function(){
         }
       })
 
-      $("#myPlaces").append(place+" ("+data.results[0].formatted_address+")"+"<input class='yourPlaces' id='"+data.results[0].geometry.location.lng+","+data.results[0].geometry.location.lat+"' type='checkbox'> ")
+      $("#myPlaces").append(place+" ("+data.results[0].formatted_address+")"+"<input class='yourPlaces' id='"+data.results[0].geometry.location.lng+","+data.results[0].geometry.location.lat+"' type='checkbox'><br> ")
     },
     error: function(err){
       alert("Either that place doesn't exist or google is down. Take your pick. #Savage")
