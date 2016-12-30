@@ -107,6 +107,7 @@ $('#myPlaces').on('click', '.yourPlaces', function(event){
   console.log(markercoords)
   let namesearch=new CB.CloudQuery("Places")
   let thispoint=new CB.CloudGeoPoint(markercoords[1],markercoords[0])
+  console.log(thispoint)
   namesearch.equalTo("Location",thispoint);
   namesearch.equalTo("User",user);
   namesearch.find({
