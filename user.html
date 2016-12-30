@@ -100,9 +100,7 @@ map.addControl(new MapboxGeocoder({
 
 }));
 
-
-
-$(".yourPlaces").click(function(event){
+$('#myPlaces').on('click', '.yourPlaces', function(event){
   console.log("hello");
   console.log(event)
   let id=event.currentTarget.id
