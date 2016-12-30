@@ -104,20 +104,33 @@ $('#myPlaces').on('click', '.yourPlaces', function(event){
   console.log("hello");
   console.log(event)
   let markercoords=event.target.id.split(",")
-  console.log(markercoords)
-  let namesearch=new CB.CloudQuery("Places")
   let thispoint=new CB.CloudGeoPoint(markercoords[0],markercoords[1])
-  console.log(thispoint)
-  namesearch.equalTo("Location",thispoint);
-  namesearch.equalTo("User",user);
-  namesearch.find({
-    success: function(msg){
-      console.log(msg)
-    },
-    error: function(err){
-      console.log(err)
-    }
-  })
+  console.log(markercoords)
+  
+  var searchFilter1 = new CB.SearchFilter();
+searchFilter1.equalTo('Location', thispoint);
+var searchFilter2 = new CB.SearchFilter();
+searchFilter2.greaterThan('User', user);
+var searchFilter = new CB.SearchFilter();
+searchFilter.and(searchFilter1);
+searchFilter.and(searchFilter2);
+var search = new CB.CloudSearch('Student');
+search.searchFilter = searchFilter;
+//search term
+search.searchQuery = new CB.SearchQuery();
+search.searchQuery.searchOn('name','Dan');
+search.search({
+success: function(list){
+console.log(list)
+},
+error: function(err) {
+//Error in retrieving the data.
+}
+});
+  
+  
+  
+  
   if(event.currentTarget.checked){
     map.addSource(id, {
      type: 'geojson',
