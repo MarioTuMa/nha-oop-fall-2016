@@ -122,18 +122,9 @@ let search = new CB.CloudQuery('Places');
         else{
           console.log(j,thispoint)
         }
-      }
-    },
-    error: function(err){
-      console.log(err)
-    },
-  })
-
-  
-  
-  
-  if(event.currentTarget.checked){
-    map.addSource(id, {
+        placeimlookingfor=placeimlookingfor[0]
+        if(event.currentTarget.checked){
+    map.addSource(placeimlookingfor.get("Name"), {
      type: 'geojson',
      data: {
          "type": "FeatureCollection",
@@ -145,7 +136,7 @@ let search = new CB.CloudQuery('Places');
                  "coordinates": markercoords
              },
              "properties": {
-                    "title": "Halp",
+                    "title": placeimlookingfor.get("Name"),
                     "icon": "circle"
                 }
          }]
@@ -154,7 +145,7 @@ let search = new CB.CloudQuery('Places');
   map.addLayer({
         "id": id,
         "type": "symbol",
-        "source": id,
+        "source": placeimlookingfor.get("Name"),
         "layout": {
             "icon-image": "{icon}-15",
             "text-field": "{title}",
@@ -162,10 +153,14 @@ let search = new CB.CloudQuery('Places');
             "text-anchor": "top"
         }
     });
+      }
+    },
+    error: function(err){
+      console.log(err)
+    },
+  })  
 }
-else{
 
-}
 })
 $("#addPlace").click(function(){
   let address=$("#address").val()
