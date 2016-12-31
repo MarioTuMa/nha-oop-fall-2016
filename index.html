@@ -29,9 +29,9 @@
       <br>
       <button id="login">Login</button>
       <button id="newUser">Create User</button>
+      <div id="account"></div>
     </h4>
     <script>
-
       $("#login").click(event => {
         CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
         let username=$("#user").val();
@@ -44,7 +44,8 @@
         user.logIn({
           success: function(data){
             console.log(data)
-
+            $("#account").append(data+"<br>"+"<a href='/user.html'>")
+            
           },
           error: function(err){
             console.log(err)
@@ -63,7 +64,6 @@
         latestuser.set("password",password)
         latestuser.set("email",email)
         latestuser.set("home",home)
-
         latestuser.signUp({
           success: function(savemessage){
             console.log(savemessage)
