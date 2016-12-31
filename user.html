@@ -116,7 +116,8 @@ let search = new CB.CloudQuery('Places');
       for(i=0;i<list.length;i++){
         j=list[i]
         console.log(j.get("Location"))
-        if(j.get("Location").get("coordinates")==thispoint.get("coordinates")){  
+        if(j.get("Location").get("coordinates")==thispoint.get("coordinates")){
+          console.log("yay")
           placeimlookingfor.push(j)
         }
         else{
