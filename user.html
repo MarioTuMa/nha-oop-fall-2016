@@ -122,6 +122,7 @@ let search = new CB.CloudQuery('Places');
         else{
           console.log(j,thispoint)
         }
+      }
         placeimlookingfor=placeimlookingfor[0]
         if(event.currentTarget.checked){
     map.addSource(placeimlookingfor.get("Name"), {
@@ -142,6 +143,7 @@ let search = new CB.CloudQuery('Places');
          }]
      }
   });
+  
   map.addLayer({
         "id": id,
         "type": "symbol",
@@ -159,8 +161,6 @@ let search = new CB.CloudQuery('Places');
       console.log(err)
     },
   })  
-}
-
 })
 $("#addPlace").click(function(){
   let address=$("#address").val()
