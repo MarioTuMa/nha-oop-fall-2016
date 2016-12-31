@@ -126,6 +126,7 @@ let search = new CB.CloudQuery('Places');
         }
       }
         placeimlookingfor=placeimlookingfor[0]
+        console.log(placeimlookingfor)
         if(event.currentTarget.checked){
     map.addSource(placeimlookingfor.get("Name"), {
      type: 'geojson',
