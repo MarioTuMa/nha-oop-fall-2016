@@ -108,10 +108,19 @@ $('#myPlaces').on('click', '.yourPlaces', function(event){
   console.log(markercoords)
   
 let search = new CB.CloudQuery('Places');
- search.equalTo("Location",thispoint)
+ search.equalTo("User",user)
   search.find({
     success: function(list){
       console.log(list)
+      let placeimlookingfor=[]
+      for(i in list){
+        if(i.get("Location")==thispoint){  
+          placeimlookingfor.push(i)
+        }
+        else{
+          console.log(i,thispoint)
+        }
+      }
     },
     error: function(err){
       console.log(err)
