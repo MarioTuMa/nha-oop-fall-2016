@@ -113,12 +113,14 @@ let search = new CB.CloudQuery('Places');
     success: function(list){
       console.log(list)
       let placeimlookingfor=[]
-      for(i in list){
-        if(i.get("Location")==thispoint){  
-          placeimlookingfor.push(i)
+      for(i=0;i<list.length;i++){
+        j=list[i]
+        console.log(j)
+        if(j.get("Location")==thispoint){  
+          placeimlookingfor.push(j)
         }
         else{
-          console.log(i,thispoint)
+          console.log(j,thispoint)
         }
       }
     },
