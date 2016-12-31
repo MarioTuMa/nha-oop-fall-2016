@@ -17,7 +17,6 @@
       #map {
         height: 450px;
         width: 100%;
-
       }
       .mapboxgl-marker {
         background-image: 'url("http://www.cliparts101.com/files/41/B9390548641D5BD1660AFD0E80367813/Map_Marker.png")'
@@ -52,12 +51,10 @@ through your selected places:
     <button id="addPlace">Add to faves</button>
 
 <script>
-
 let counter=0;
 CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
 let query=new CB.CloudQuery("User");
 query.equalTo('username', "Mario");
-
 query.find({
     success : function(list){
         console.log(list)
@@ -77,10 +74,38 @@ query.find({
               let lat=CBOBJ.get("Location").get("latitude")
               let lng=CBOBJ.get("Location").get("longitude")
               $("#myPlaces").append(name+" ("+address+")"+"<input class='yourPlaces' id='"+lng+","+lat+"' type='checkbox'><br> ")
+                map.addSource(CBOBJ.get("Name"), {
+               type: 'geojson',
+               data: {
+                   "type": "FeatureCollection",
+                   "features": [{
+                       "type": "Feature",
+                       "properties": {},
+                       "geometry": {
+                           "type": "Point",
+                           "coordinates": [lat,lng]
+                       },
+                       "properties": {
+
+                          }
+                   }]
+               }
+            });
+
+            map.addLayer({
+                  "id": CBOBJ.get("Name"),
+                  "type": "symbol",
+                  "source": CBOBJ.get("Name"),
+                  "layout": {
+                      "icon-image": "{icon}-15",
+                      "text-field": "{title}",
+                      "text-offset": [0, 0.2],
+                      "text-anchor": "top"
+                  }
+              });
             }
           },
           error: function(fail_msg){
-
           }
         })
         let username=user.get("username");
@@ -94,10 +119,8 @@ var map = new mapboxgl.Map({
     center: [lat, lng],
     zoom: 11
 });
-
 map.addControl(new MapboxGeocoder({
     accessToken: mapboxgl.accessToken
-
 }));
 
 $('#myPlaces').on('click', '.yourPlaces', function(event){
@@ -106,7 +129,7 @@ $('#myPlaces').on('click', '.yourPlaces', function(event){
   let markercoords=event.target.id.split(",")
   let thispoint=new CB.CloudGeoPoint(markercoords[0],markercoords[1])
   console.log(markercoords)
-  
+
 let search = new CB.CloudQuery('Places');
  search.equalTo("User",user)
   search.find({
@@ -128,52 +151,52 @@ let search = new CB.CloudQuery('Places');
         placeimlookingfor=placeimlookingfor[0]
         console.log(placeimlookingfor)
         if(event.currentTarget.checked){
-    map.addSource(placeimlookingfor.get("Name"), {
-     type: 'geojson',
-     data: {
-         "type": "FeatureCollection",
-         "features": [{
-             "type": "Feature",
-             "properties": {},
-             "geometry": {
-                 "type": "Point",
-                 "coordinates": markercoords
-             },
+          map.getSource(placeimlookingfor.get("Name")).setData({
+               "type": "FeatureCollection",
+               "features": [{
+                   "type": "Feature",
+                   "properties": {},
+                   "geometry": {
+                       "type": "Point",
+                       "coordinates": markercoords
+                   },
              "properties": {
                     "title": placeimlookingfor.get("Name"),
                     "icon": "circle"
                 }
          }]
-     }
   });
-  
-  map.addLayer({
-        "id": id,
-        "type": "symbol",
-        "source": placeimlookingfor.get("Name"),
-        "layout": {
-            "icon-image": "{icon}-15",
-            "text-field": "{title}",
-            "text-offset": [0, 0.2],
-            "text-anchor": "top"
-        }
-    });
+
+      }
+      else{
+        map.getSource(placeimlookingfor.get("Name")).setData({
+             "type": "FeatureCollection",
+             "features": [{
+                 "type": "Feature",
+                 "properties": {},
+                 "geometry": {
+                     "type": "Point",
+                     "coordinates": markercoords
+                 },
+                 "properties": {
+
+                    }
+             }]
+      });
       }
     },
     error: function(err){
       console.log(err)
     },
-  })  
+  })
 })
 $("#addPlace").click(function(){
   let address=$("#address").val()
   let place=$("#placeName").val()
   let url="https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyCgvMvFwad7QwQI3wlFjN-lld69R5mfwxw"
-
   $.ajax({
     url: url,
     success: function(data){
-
       let newplace= new CB.CloudObject("Places")
       var point = new CB.CloudGeoPoint(data.results[0].geometry.location.lng,data.results[0].geometry.location.lat);
       newplace.set("Location",point)
@@ -185,14 +208,12 @@ $("#addPlace").click(function(){
         success: function(message){
           console.log("SUCCESS")
           console.log(message)
-
         },
         error: function(message){
           console.log("FAIL")
           console.log(message)
         }
       })
-
       $("#myPlaces").append(place+" ("+data.results[0].formatted_address+")"+"<input class='yourPlaces' id='"+data.results[0].geometry.location.lng+","+data.results[0].geometry.location.lat+"' type='checkbox'><br> ")
     },
     error: function(err){
@@ -204,7 +225,6 @@ map.on('zoom', function() {
   let zoom=map.getZoom();
     $(".mapboxgl-marker").empty();
     $(".mapboxgl-marker").append("<img height='"+zoom/1.5+"' width='"+zoom/1.5+"' src='https://www.clipartkid.com/images/282/red-glossy-dot-clip-art-at-clker-com-vector-clip-art-online-royalty-Gefbyd-clipart.png'/>")
-
 });
 $("#route").click(function(){
   console.log($(".yourPlaces"))
@@ -246,7 +266,6 @@ $("#route").click(function(){
             }
         }
     });
-
     map.addLayer({
         "id": "route",
         "type": "line",
@@ -274,13 +293,11 @@ $("#route").click(function(){
   }]
 });
   }
-
       },
     error: function(err){
       console.log(err)
     }
   })
-
 })
     },error : function(error){
         //error
