@@ -29,9 +29,30 @@
       <br>
       <button id="login">Login</button>
       <button id="newUser">Create User</button>
-      <div id="account"></div>
+      <div id="account">
+      Edit Profile:
+        <table>
+          <td>
+            <tr>Username</tr>
+            <tr><input id="username"></tr>
+          </td>  
+          <td>
+            <tr>Password</tr>
+            <tr><input id="pword"></tr>
+          </td>
+          <td>
+            <tr>Home Address </tr>
+            <tr><input id="address"></tr>
+          </td>
+          <td>
+            <tr>Places</tr>
+            <tr id="Places"></tr>
+          </td>
+          </table>      
+      </div>
     </h4>
     <script>
+      
       $("#login").click(event => {
         CB.CloudApp.init('nbnikckfyceg', 'a027eaea-2e61-4c9a-b1b8-21cdb080bd66');
         let username=$("#user").val();
